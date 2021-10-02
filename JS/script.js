@@ -45,6 +45,7 @@ function removeTask(e) {
 			let ele = e.target.parentElement;
 			ele.remove();
 			// console.log(ele);
+			removeFormLS(ele);
 		}
 	}
 }
@@ -57,6 +58,7 @@ function clearTask(e) {
 		// faster way
 		taskList.removeChild(taskList.firstChild);
 	}
+	localStorage.clear();
 }
 
 // create filterTask function
@@ -101,4 +103,23 @@ function getTask() {
 		crossLink.innerHTML = 'x';
 		li.appendChild(crossLink);
 	});
+}
+
+//  remove task Form LS
+function removeFormLS(taskItem) {
+	let tasks;
+	if (localStorage.getItem('tasks') === null) {
+		tasks = [];
+	} else {
+		tasks = JSON.parse(localStorage.getItem('tasks'));
+	}
+
+	let li = taskItem;
+	li.removeChild(li.lastChild); // <a></a>
+	tasks.forEach((task, index) => {
+		if (li.textContent.trim() === task) {
+			tasks.splice(index, 1);
+		}
+	});
+	localStorage.setItem('tasks', JSON.stringify(tasks));
 }
